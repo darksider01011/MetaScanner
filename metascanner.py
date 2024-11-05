@@ -14,7 +14,8 @@ parser.add_argument('-u', '--url', type=str, help='Set target url', metavar= 'TA
 
 args = parser.parse_args()
 url = args.url
-
+print("")
+print("MetaScanner V0.1")
 print("Author: Mostafa Taghizadeh")
 
 def robots(url):
