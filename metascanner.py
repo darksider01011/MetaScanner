@@ -1,11 +1,8 @@
 import requests
 import warnings
 import argparse
-import os
 from colorama import Fore, Back, Style
 from time import sleep
-from urllib.request import urlopen
-import urllib
 
 warnings.filterwarnings("ignore")
 
@@ -16,7 +13,7 @@ args = parser.parse_args()
 url = args.url
 print("")
 print("MetaScanner V0.1")
-print("Author: Mostafa Taghizadeh")
+print("Dev: Darksider01011")
 
 def robots(url):
     headers = {
@@ -109,7 +106,7 @@ def sitemap(url):
         else:
             sitemap = False
 
-        if (sitemap == True) or (loc == True):
+        if (sitemap == True) or (loc == True) or (last == True):
             print(Fore.WHITE + Style.BRIGHT + url + Fore.GREEN + Style.BRIGHT + " Found" + Fore.WHITE + "  |" + Fore.BLUE + "  Status Code:" + Fore.GREEN + " " + Fore.WHITE +  str(code) + "  |" + Fore.WHITE + "  Response Size: " + str(size))
         else:
             print(Fore.WHITE + Style.BRIGHT + url + Fore.RED + Style.BRIGHT + " Not Found" + Fore.WHITE + "  |" + Fore.BLUE + "  Status Code:" + Fore.GREEN + " " + Fore.WHITE +  str(code) + "  |" + Fore.WHITE + "  Response Size: " + str(size))
@@ -120,6 +117,48 @@ def sitemap(url):
     return ""
 
 def security(url):
+    try:
+        headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
+        'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',  
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0'
+        }
+        url += "/security.txt"
+        response = requests.get(url, allow_redirects=True, verify=False, headers=headers)
+        code = response.status_code
+        body = response.text
+        lastmodified = response.headers.get('last-modified')
+        contenttype = response.headers.get('Content-Type')
+        size = len(response.content)
+
+        if lastmodified:
+            last = True
+        else:
+            last = False
+        
+        if (contenttype == "text/plain; charset=utf-8") or (contenttype == "text/plain") or (contenttype == "text/plain; charset=UTF-8") or (contenttype == "text/plain;charset=utf-8") or (contenttype == "text/plain;charset=UTF-8"):
+            content = True
+        else:
+            content = False
+        
+        if (content == True):
+            print(Fore.WHITE + Style.BRIGHT + url + Fore.GREEN + Style.BRIGHT + " Found" + Fore.WHITE + "  |" + Fore.BLUE + "  Status Code:" + Fore.GREEN + " " + Fore.WHITE +  str(code) + "  |" + Fore.WHITE + "  Response Size: " + str(size))
+        else:
+            print(Fore.WHITE + Style.BRIGHT + url + Fore.RED + Style.BRIGHT + " Not Found" + Fore.WHITE + "  |" + Fore.BLUE + "  Status Code:" + Fore.GREEN + " " + Fore.WHITE +  str(code) + "  |" + Fore.WHITE + "  Response Size: " + str(size))
+
+    except requests.exceptions.RequestException as e:
+        print(Fore.WHITE + Style.BRIGHT + url + Fore.RED + Style.BRIGHT + "  ERROR: " + str(e))
+
+    return "" 
+
+def security_alter(url):
     try:
         headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
@@ -420,6 +459,7 @@ if __name__ == "__main__":
     robots(url)
     sitemap(url)
     security(url)
+    security_alter(url)
     humans(url)
     pgp(url),wellpgp(url)
     favicon(url)
