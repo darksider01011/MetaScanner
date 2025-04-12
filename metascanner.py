@@ -181,7 +181,7 @@ def security_alter(url):
         'Cache-Control': 'max-age=0'
         }
         url += "/.well-known/security.txt"
-        response = requests.get(url, allow_redirects=True, verify=False, headers=headers)
+        response = requests.get(url, allow_redirects=True, verify=False, headers=headers, timeout=10)
         code = response.status_code
         body = response.text
         lastmodified = response.headers.get('last-modified')
